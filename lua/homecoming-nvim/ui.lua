@@ -13,7 +13,7 @@ function M.get_header(opts)
 	utils.concat(res, header)
 
 	for _ = 1, opts.header_mb or 0 do
-		table.insert(res, "")
+		utils.concat(res, "")
 	end
 
 	return res
@@ -27,13 +27,13 @@ function M.get_footer(opts)
 	local res = {}
 
 	for _ = 1, opts.footer_mt or 0 do
-		table.insert(res, "")
+		utils.concat(res, "")
 	end
 
 	utils.concat(res, footer)
 
 	for _ = 1, opts.header_mb or 0 do
-		table.insert(res, "")
+		utils.concat(res, "")
 	end
 
 	return res
@@ -60,13 +60,13 @@ function M.render(buf, opts, state)
 	local line_num = #lines
 	local item_prefix = M.get_item_prefix(opts)
 	for j, section in ipairs(opts.sections) do
-		table.insert(lines, section.title)
+		utils.concat(lines, section.title)
 
 		line_num = line_num + 1
 		for i, item in ipairs(section.items) do
 			local item_line = item_prefix .. item.label
 
-			table.insert(lines, item_line)
+			utils.concat(lines, item_line)
 			line_num = line_num + 1
 
 			-- Cache the line number for this item, used for navigation and actions
@@ -79,7 +79,7 @@ function M.render(buf, opts, state)
 
 			if i < #section.items then
 				for _ = 1, opts.item_gap or 0 do
-					table.insert(lines, "")
+					utils.concat(lines, "")
 					line_num = line_num + 1
 				end
 			end
@@ -87,7 +87,7 @@ function M.render(buf, opts, state)
 
 		if j < #opts.sections then
 			for _ = 1, opts.section_gap or 0 do
-				table.insert(lines, "")
+				utils.concat(lines, "")
 				line_num = line_num + 1
 			end
 		end
@@ -136,6 +136,8 @@ function M.set_keymaps(buf, move_cursor_fn, execute_action_fn)
 		move_cursor_fn(-1)
 	end, { buffer = buf })
 
+	vim.keymap.set("n", "h", function() end, { buffer = buf })
+	vim.keymap.set("n", "l", function() end, { buffer = buf })
 	vim.keymap.set("n", "<BS>", function() end, { buffer = buf })
 	vim.keymap.set("n", "<CR>", execute_action_fn, { buffer = buf })
 end

@@ -17,6 +17,13 @@ function M.get_from_str_or_fn(str_or_fn)
 	return nil
 end
 
+--- Trims leading whitespace from a string
+--- @param s string The string to trim
+--- @return string s The trimmed string
+function M.trim_end(s)
+	return s:match("^(.-)%s*$")
+end
+
 --- Concatenates a value or list of values to a table
 --- @param tab table The table to concatenate into
 --- @param val string|string[] A single value or a list of values to concatenate into the table
@@ -24,11 +31,11 @@ function M.concat(tab, val)
 	if type(val) == "table" then
 		for _, v in ipairs(val) do
 			if type(v) == "string" then
-				table.insert(tab, v)
+				table.insert(tab, M.trim_end(v))
 			end
 		end
 	elseif type(val) == "string" then
-		table.insert(tab, val)
+		table.insert(tab, M.trim_end(val))
 	end
 end
 
