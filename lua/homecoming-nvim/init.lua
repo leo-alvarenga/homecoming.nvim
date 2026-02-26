@@ -4,11 +4,9 @@ local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
---- @param user_opts homecoming-nvim.Opts|nil User-provided configuration options to customize
-function M.setup(user_opts)
-	config.set_opts(user_opts)
-
-	if config.opts.auto_start then
+--- @param user_opts homecoming-nvim.Opts User-provided configuration options to customize
+local function setup_autocmds(user_opts)
+	if user_opts.auto_start then
 		vim.api.nvim_create_autocmd("VimEnter", {
 			callback = function()
 				if vim.fn.argc() == 0 then
@@ -17,6 +15,14 @@ function M.setup(user_opts)
 			end,
 		})
 	end
+end
+
+--- @param user_opts homecoming-nvim.Opts|nil User-provided configuration options to customize
+function M.setup(user_opts)
+	config.set_opts(user_opts)
+
+	ui.highlights.register_hls(state.get_highlight_ns())
+	setup_autocmds(config.opts)
 end
 
 --- Moves the cursor by the given delta and updates the highlights accordingly
@@ -29,6 +35,7 @@ end
 function M.open(close_all)
 	local buf = state.get_buffer()
 	local w, h = state.get_window_size()
+
 	if close_all then
 		state.set_lines(ui.close_all_and_refresh(buf, config.opts, w, h, move_cursor, state.execute_current_item))
 	else

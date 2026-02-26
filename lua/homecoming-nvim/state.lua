@@ -12,6 +12,14 @@ M.curr = {
 	lines = {},
 }
 
+function M.reset()
+	M.curr.buf = nil
+	M.curr.win = nil
+	M.curr.curr_item = 1
+	M.curr.highlight_ns = nil
+	M.curr.lines = {}
+end
+
 --- @param lines homecoming-nvim.LineInfo[] The metadata for each line corresponding to items, including action, length, line number, and start column, used for navigation and actions
 function M.set_lines(lines)
 	M.curr.lines = lines

@@ -144,4 +144,6 @@ function M.close_all_and_refresh(buf, opts, win_width, win_height, move_cursor_f
 	return lines_metadata
 end
 
+M.highlights = require("homecoming-nvim.ui.highlights")
+
 return M
