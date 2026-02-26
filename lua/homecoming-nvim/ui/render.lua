@@ -1,0 +1,118 @@
+local consts = require("homecoming-nvim.constants")
+local utils = require("homecoming-nvim.utils")
+
+local M = {}
+
+--- Renders the dashboard content based on the current ration, including header, sections with items, and footer
+--- @param buf integer The buffer handle for the dashboard, used to set the buffer lines with the rendered content
+--- @param opts homecoming-nvim.Opts The configuration options for the dashboard, including header, sections, and footer
+--- @return homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
+function M.render(buf, opts)
+	local components = require("homecoming-nvim.ui.components")
+
+	local lines = {}
+
+	utils.concat(lines, components.header.get(opts))
+
+	local sections, line_metadata = components.sections.get(opts, #lines)
+
+	utils.concat(lines, sections)
+
+	utils.concat(lines, components.footer.get(opts))
+
+	vim.bo[buf].modifiable = true
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+	vim.bo[buf].modifiable = false
+
+	vim.cmd("edit " .. consts.buffer_name)
+
+	return line_metadata
+end
+
+--- Updates the cursor position and highlights the current item based on the current state of the dashboard
+--- @param buf integer The buffer handle for the dashboard, used to set the cursor position and apply highlights
+--- @param hl_ns integer The highlight namespace handle for the dashboard, used to apply highlights to the current item
+--- @param range homecoming-nvim.LineHlRange The line and column range for highlighting
+function M.update_cursor(buf, hl_ns, range)
+	vim.api.nvim_win_set_cursor(0, { range.line, range.start_col - 1 })
+	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
+
+	vim.hl.range(buf, hl_ns, "Search", { range.line - 1, range.start_col }, { range.line - 1, range.end_col })
+end
+
+--- Sets up keymaps for navigating the dashboard and triggering actions
+--- @param buf integer The buffer handle for the dashboard, used to set buffer-local keymaps
+--- @param move_cursor_fn function A function that takes a delta and updates the cursor position and highlights accordingly, used as the callback for navigation keymaps
+--- @param execute_action_fn function A function that executes the action for the currently selected item, used as the callback for the Enter keymap
+function M.set_keymaps(buf, move_cursor_fn, execute_action_fn)
+	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
+
+	vim.keymap.set("n", "<Down>", function()
+		move_cursor_fn(1)
+	end, { buffer = buf })
+
+	vim.keymap.set("n", "j", function()
+		move_cursor_fn(1)
+	end, { buffer = buf })
+
+	vim.keymap.set("n", "<Up>", function()
+		move_cursor_fn(-1)
+	end, { buffer = buf })
+
+	vim.keymap.set("n", "k", function()
+		move_cursor_fn(-1)
+	end, { buffer = buf })
+
+	vim.keymap.set("n", "h", function() end, { buffer = buf })
+	vim.keymap.set("n", "l", function() end, { buffer = buf })
+	vim.keymap.set("n", "<BS>", function() end, { buffer = buf })
+	vim.keymap.set("n", "<CR>", execute_action_fn, { buffer = buf })
+end
+
+--- Refreshes the dashboard buffer with the current configuration and state, and sets up keymaps for navigation and actions
+--- @param buf integer The buffer handle for the dashboard, if nil it will be
+--- @param opts homecoming-nvim.Opts The configuration options to use for rendering the dashboard, if nil it will use the current configuration
+--- @param state homecoming-nvim.DashboardState The current state of the dashboard
+--- @param move_cursor_fn function A function that takes a delta and updates the cursor position and highlights accordingly, used as the callback for navigation keymaps
+--- @param execute_action_fn function A function that executes the action for the currently selected item, used as the callback for the Enter keymap
+--- @return homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
+function M.refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
+	vim.api.nvim_buf_set_name(buf, consts.buffer_name)
+
+	-- Buffer options: make it feel like a UI
+	vim.bo[buf].buftype = "nofile"
+	vim.bo[buf].bufhidden = "wipe"
+	vim.bo[buf].swapfile = false
+	vim.bo[buf].modifiable = false
+	vim.bo[buf].filetype = "dashboard"
+
+	local lines_metadata = M.render(buf, opts)
+	M.set_keymaps(buf, move_cursor_fn, execute_action_fn)
+
+	vim.cmd("setlocal nonumber norelativenumber nocursorline")
+
+	return lines_metadata
+end
+
+--- Closes all buffers except the dashboard buffer and refreshes the dashboard, used when opening the dashboard with no file arguments to ensure a clean state
+--- @param buf integer The buffer handle for the dashboard, if nil it will be
+--- @param opts homecoming-nvim.Opts The configuration options to use for rendering the dashboard, if nil it will use the current configuration
+--- @param state homecoming-nvim.DashboardState The current state of the dashboard
+--- @param move_cursor_fn function A function that takes a delta and updates the cursor position and highlights accordingly, used as the callback for navigation keymaps
+--- @param execute_action_fn function A function that executes the action for the currently selected item, used as the callback for the Enter keymap
+--- @return homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
+function M.close_all_and_refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
+	local lines_metadata = M.refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
+
+	local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+
+	for _, curr_buf in ipairs(buffers) do
+		if vim.api.nvim_buf_is_valid(curr_buf.bufnr) and curr_buf.name ~= consts.buffer_name then
+			vim.api.nvim_buf_delete(curr_buf.bufnr, { force = true })
+		end
+	end
+
+	return lines_metadata
+end
+
+return M

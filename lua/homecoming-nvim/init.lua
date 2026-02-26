@@ -1,5 +1,4 @@
 local config = require("homecoming-nvim.config")
-local consts = require("homecoming-nvim.constants")
 local state = require("homecoming-nvim.state")
 local ui = require("homecoming-nvim.ui")
 
@@ -12,7 +11,7 @@ function M.setup(user_opts)
 	vim.api.nvim_create_autocmd("VimEnter", {
 		callback = function()
 			if vim.fn.argc() == 0 then
-				M.open()
+				M.open(true)
 			end
 		end,
 	})
@@ -25,25 +24,15 @@ local function move_cursor(delta)
 	ui.update_cursor(state.get_buffer(), state.get_highlight_ns(), state.get_curr_item_hl_range())
 end
 
-function M.refresh()
+function M.open(close_all)
 	local buf = state.get_buffer()
-	vim.api.nvim_buf_set_name(buf, consts.buffer_name)
 
-	-- Buffer options: make it feel like a UI
-	vim.bo[buf].buftype = "nofile"
-	vim.bo[buf].bufhidden = "wipe"
-	vim.bo[buf].swapfile = false
-	vim.bo[buf].modifiable = false
-	vim.bo[buf].filetype = "dashboard"
+	if close_all then
+		state.set_lines(ui.close_all_and_refresh(buf, config.opts, state.curr, move_cursor, state.execute_current_item))
+	else
+		state.set_lines(ui.refresh(buf, config.opts, state.curr, move_cursor, state.execute_current_item))
+	end
 
-	ui.render(buf, config.opts, state.curr)
-	ui.set_keymaps(buf, move_cursor, state.execute_current_item)
-
-	vim.cmd("setlocal nonumber norelativenumber nocursorline")
-end
-
-function M.open()
-	M.refresh()
 	move_cursor(0) -- Ensure cursor is on the first item
 end
 

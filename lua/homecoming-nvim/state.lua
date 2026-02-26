@@ -8,9 +8,13 @@ M.curr = {
 	curr_item = 1,
 
 	highlight_ns = nil, -- Namespace for curr_item highlighting
-	item_lines = {}, -- Cache of line numbers for each item, used for navigation and actions
 	lines = {},
 }
+
+--- @param lines homecoming-nvim.LineInfo[] The metadata for each line corresponding to items, including action, length, line number, and start column, used for navigation and actions
+function M.set_lines(lines)
+	M.curr.lines = lines
+end
 
 --- Returns the dashboard buffer, creating it if it doesn't exist or is invalid
 --- @returns integer Buffer handle

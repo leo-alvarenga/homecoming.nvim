@@ -1,3 +1,3 @@
 return {
-	buffer_name = "homecoming://dashboard",
+	buffer_name = "homecoming://Dashboard",
 }

@@ -36,7 +36,6 @@
 --- @field buf integer|nil Buffer handle for the dashboard buffer
 --- @field curr_item integer Current curr_item position (1-based index into the list of items)
 --- @field highlight_ns integer|nil Namespace handle for curr_item highlighting
---- @field item_lines table<number, integer> Cache of line numbers for each item, used for navigation and actions
 --- @field lines homecoming-nvim.LineInfo[] Cache of all lines in the dashboard, used for rendering and refreshing the buffer
 
 return {}
