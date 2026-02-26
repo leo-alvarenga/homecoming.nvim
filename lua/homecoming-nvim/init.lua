@@ -8,13 +8,15 @@ local M = {}
 function M.setup(user_opts)
 	config.set_opts(user_opts)
 
-	vim.api.nvim_create_autocmd("VimEnter", {
-		callback = function()
-			if vim.fn.argc() == 0 then
-				M.open(true)
-			end
-		end,
-	})
+	if config.opts.auto_start then
+		vim.api.nvim_create_autocmd("VimEnter", {
+			callback = function()
+				if vim.fn.argc() == 0 then
+					M.open(true)
+				end
+			end,
+		})
+	end
 end
 
 --- Moves the cursor by the given delta and updates the highlights accordingly
@@ -28,9 +30,11 @@ function M.open(close_all)
 	local buf = state.get_buffer()
 
 	if close_all then
-		state.set_lines(ui.close_all_and_refresh(buf, config.opts, state.curr, move_cursor, state.execute_current_item))
+		state.set_lines(
+			ui.close_all_and_refresh(buf, config.opts, state.get_window_size(), move_cursor, state.execute_current_item)
+		)
 	else
-		state.set_lines(ui.refresh(buf, config.opts, state.curr, move_cursor, state.execute_current_item))
+		state.set_lines(ui.refresh(buf, config.opts, state.get_window_size(), move_cursor, state.execute_current_item))
 	end
 
 	move_cursor(0) -- Ensure cursor is on the first item

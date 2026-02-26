@@ -1,6 +1,7 @@
 --- @type homecoming-nvim.Opts
 local default_config = {
 	auto_start = true,
+	centered = true,
 
 	header_mb = 1,
 	header = function()
@@ -12,6 +13,8 @@ local default_config = {
 	item_gap = 0,
 	item_indent = 2,
 	item_prefix_char = "",
+
+	section_anchor = "header_half",
 	section_gap = 1,
 	sections = {
 		{
@@ -44,6 +47,7 @@ local default_config = {
 		},
 	},
 
+	footer_anchor = "self",
 	footer_mt = 0,
 	footer_mb = 0,
 	footer = function()
@@ -56,7 +60,8 @@ local default_config = {
 
 local M = {}
 
-M.opts = {}
+--- @type homecoming-nvim.Opts
+M.opts = default_config
 
 function M.set_opts(user_opts)
 	M.opts = vim.tbl_deep_extend("force", {}, default_config, user_opts or {})

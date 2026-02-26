@@ -6,19 +6,32 @@ local M = {}
 --- Renders the dashboard content based on the current ration, including header, sections with items, and footer
 --- @param buf integer The buffer handle for the dashboard, used to set the buffer lines with the rendered content
 --- @param opts homecoming-nvim.Opts The configuration options for the dashboard, including header, sections, and footer
+--- @param win_width integer The width of the dashboard window, used for centering text if the centered option is enabled
 --- @return homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
-function M.render(buf, opts)
+function M.render(buf, opts, win_width)
 	local components = require("homecoming-nvim.ui.components")
-
 	local lines = {}
 
-	utils.concat(lines, components.header.get(opts))
+	local header = components.header.get(opts)
+	utils.concat(lines, components.center.lines(header, win_width))
 
-	local sections, line_metadata = components.sections.get(opts, #lines)
+	local header_width = 0
 
+	for _, line in ipairs(header) do
+		header_width = math.max(header_width, vim.fn.strdisplaywidth(line))
+	end
+
+	local sections, line_metadata = components.sections.get(opts, #lines, win_width, header_width)
 	utils.concat(lines, sections)
 
-	utils.concat(lines, components.footer.get(opts))
+	local footer_anchor = nil
+	if opts.footer_anchor == "header" then
+		footer_anchor = header_width
+	elseif opts.footer_anchor == "header_half" then
+		footer_anchor = math.max(0, math.floor(header_width / 2))
+	end
+
+	utils.concat(lines, components.center.lines(components.footer.get(opts), win_width, footer_anchor))
 
 	vim.bo[buf].modifiable = true
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
@@ -72,11 +85,11 @@ end
 --- Refreshes the dashboard buffer with the current configuration and state, and sets up keymaps for navigation and actions
 --- @param buf integer The buffer handle for the dashboard, if nil it will be
 --- @param opts homecoming-nvim.Opts The configuration options to use for rendering the dashboard, if nil it will use the current configuration
---- @param state homecoming-nvim.DashboardState The current state of the dashboard
+--- @param win_width integer The width of the dashboard window, used for centering text if the centered option is enabled
 --- @param move_cursor_fn function A function that takes a delta and updates the cursor position and highlights accordingly, used as the callback for navigation keymaps
 --- @param execute_action_fn function A function that executes the action for the currently selected item, used as the callback for the Enter keymap
 --- @return homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
-function M.refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
+function M.refresh(buf, opts, win_width, move_cursor_fn, execute_action_fn)
 	vim.api.nvim_buf_set_name(buf, consts.buffer_name)
 
 	-- Buffer options: make it feel like a UI
@@ -86,7 +99,7 @@ function M.refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
 	vim.bo[buf].modifiable = false
 	vim.bo[buf].filetype = "dashboard"
 
-	local lines_metadata = M.render(buf, opts)
+	local lines_metadata = M.render(buf, opts, win_width)
 	M.set_keymaps(buf, move_cursor_fn, execute_action_fn)
 
 	vim.cmd("setlocal nonumber norelativenumber nocursorline")
@@ -97,12 +110,12 @@ end
 --- Closes all buffers except the dashboard buffer and refreshes the dashboard, used when opening the dashboard with no file arguments to ensure a clean state
 --- @param buf integer The buffer handle for the dashboard, if nil it will be
 --- @param opts homecoming-nvim.Opts The configuration options to use for rendering the dashboard, if nil it will use the current configuration
---- @param state homecoming-nvim.DashboardState The current state of the dashboard
+--- @param win_width integer The width of the dashboard window, used for centering text if the centered option is enabled
 --- @param move_cursor_fn function A function that takes a delta and updates the cursor position and highlights accordingly, used as the callback for navigation keymaps
 --- @param execute_action_fn function A function that executes the action for the currently selected item, used as the callback for the Enter keymap
 --- @return homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
-function M.close_all_and_refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
-	local lines_metadata = M.refresh(buf, opts, state, move_cursor_fn, execute_action_fn)
+function M.close_all_and_refresh(buf, opts, win_width, move_cursor_fn, execute_action_fn)
+	local lines_metadata = M.refresh(buf, opts, win_width, move_cursor_fn, execute_action_fn)
 
 	local buffers = vim.fn.getbufinfo({ buflisted = 1 })
 

@@ -29,7 +29,7 @@ end
 --- @param enable_gap boolean A flag indicating whether the gap should be added
 --- @returns string[] A new list of lines with the specified gap added if enabled, otherwise the original lines
 function M.add_gap(lines, gap, enable_gap)
-	if not enable_gap then
+	if not enable_gap or gap < 1 then
 		return lines
 	end
 

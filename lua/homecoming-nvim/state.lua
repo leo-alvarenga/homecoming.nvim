@@ -5,6 +5,7 @@ local M = {}
 --- @type homecoming-nvim.DashboardState
 M.curr = {
 	buf = nil,
+	win = nil,
 	curr_item = 1,
 
 	highlight_ns = nil, -- Namespace for curr_item highlighting
@@ -14,6 +15,20 @@ M.curr = {
 --- @param lines homecoming-nvim.LineInfo[] The metadata for each line corresponding to items, including action, length, line number, and start column, used for navigation and actions
 function M.set_lines(lines)
 	M.curr.lines = lines
+end
+
+function M.get_window()
+	if M.curr.win and vim.api.nvim_win_is_valid(M.curr.win) then
+		return M.curr.win or 0 -- 0 is here purely for type consistency, it will never actually be returned since we check validity above
+	end
+
+	M.curr.win = vim.api.nvim_get_current_win()
+
+	return M.curr.win or 0 -- 0 is here purely for type consistency, it will never actually be returned since we always set the window above
+end
+
+function M.get_window_size()
+	return vim.api.nvim_win_get_width(M.get_window()), 0
 end
 
 --- Returns the dashboard buffer, creating it if it doesn't exist or is invalid
