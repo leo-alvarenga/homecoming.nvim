@@ -57,9 +57,8 @@ function M.get(opts, header_line_count, win_width, header_width)
 		end
 	else
 		longest_section, longest_item = M.get_longest_lens(opts)
+		longest_item = math.max(0, longest_item - item_prefix:len())
 	end
-
-	longest_item = math.max(0, longest_item - item_prefix:len())
 
 	--- @type homecoming-nvim.LineInfo[]
 	local lines_metadata = {}
@@ -84,12 +83,7 @@ function M.get(opts, header_line_count, win_width, header_width)
 			utils.concat(lines, item_line)
 			line_num = line_num + 1
 
-			local start = math.max(
-				1,
-				item_line:len()
-					- (item_line:len() - padding:len() - item_prefix:len())
-					- (math.max(0, opts.item_indent - 1))
-			)
+			local start = padding:len() + item_prefix:len()
 
 			-- Cache the line number for this item, used for navigation and actions
 			table.insert(lines_metadata, {

@@ -5,7 +5,7 @@ local default_config = {
 	header_mb = 1,
 	header = function()
 		return {
-			"Welcome 👋",
+			"Welcome",
 		}
 	end,
 
@@ -13,7 +13,7 @@ local default_config = {
 	item_indent = 2,
 	item_prefix_char = "",
 
-	section_anchor = "header_half",
+	section_anchor = "header",
 	section_gap = 1,
 	sections = {
 		{
@@ -47,12 +47,12 @@ local default_config = {
 	},
 
 	footer_anchor = "self",
-	footer_mt = 0,
+	footer_mt = 2,
 	footer_mb = 0,
 	footer = function()
 		return {
-			"",
-			"Have a productive session ✨",
+			"Have a productive session",
+			"NeoVim version: " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch,
 		}
 	end,
 }

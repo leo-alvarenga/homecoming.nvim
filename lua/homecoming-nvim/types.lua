@@ -17,7 +17,7 @@
 --- @field auto_start boolean? If true, the dashboard will automatically open when Neovim starts with no file arguments. Default is true
 --- @field header_mb integer? How many lines should be added as margin after the header section. Default is 1
 --- @field header string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard header
---- @field section_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'header_half'
+--- @field section_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'header'
 --- @field section_gap integer? How many lines should be added as gap between sections. Default is 1
 --- @field sections homecoming-nvim.Section[] A list of sections to be displayed on the dashboard, each with a title and a list of items
 --- @field item_gap integer? How many lines should be added as gap between items. Default is 0
