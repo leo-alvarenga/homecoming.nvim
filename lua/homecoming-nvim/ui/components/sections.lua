@@ -73,6 +73,7 @@ function M.get(opts, header_line_count, win_width, header_width)
 		end
 
 		line_num = line_num + 1
+
 		for i, item in ipairs(section.items) do
 			local padding = ""
 			if win_width then
@@ -93,10 +94,15 @@ function M.get(opts, header_line_count, win_width, header_width)
 				start = start,
 			})
 
-			margin.add_gap(lines, opts.item_gap, i < #section.items)
+			if i < #section.items then
+				lines = margin.add_gap(lines, opts.item_gap)
+			end
 		end
 
-		margin.add_gap(lines, opts.section_gap, j < #opts.sections)
+		if j < #opts.sections then
+			lines = margin.add_gap(lines, opts.section_gap)
+			line_num = line_num + opts.section_gap
+		end
 	end
 
 	return lines, lines_metadata

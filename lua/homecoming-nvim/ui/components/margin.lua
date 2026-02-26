@@ -26,10 +26,9 @@ end
 --- Adds a gap between lines by inserting empty lines based on the specified gap size
 --- @param lines string[] The list of lines to which the gap should be added
 --- @param gap integer|nil The size of the gap
---- @param enable_gap boolean A flag indicating whether the gap should be added
---- @returns string[] A new list of lines with the specified gap added if enabled, otherwise the original lines
-function M.add_gap(lines, gap, enable_gap)
-	if not enable_gap or gap < 1 then
+--- @return string[] res A new list of lines with the specified gap added if enabled, otherwise the original lines
+function M.add_gap(lines, gap)
+	if gap < 1 then
 		return lines
 	end
 
