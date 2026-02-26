@@ -26,7 +26,7 @@ end
 
 --- Generates the prefix string for each item based on the configuration options, including the prefix character and indentation
 --- @param opts homecoming-nvim.Opts The configuration options, including item_prefix_char and item_indent
---- @returns string The prefix string to be added before each item label when rendering
+--- @return string prefix The prefix string to be added before each item label when rendering
 function M.get_item_prefix(opts)
 	local prefix_char = opts.item_prefix_char or ""
 	local indent = (opts.item_indent or 2) - prefix_char:len()
@@ -37,7 +37,7 @@ end
 --- Maps the main content from the options to a list of strings to be rendered
 --- @param opts homecoming-nvim.Opts The configuration options
 --- @param header_line_count integer The number of lines in the header, used to calculate line numbers for items
---- @param win_width integer The width of the dashboard window, used for centering text if the centered option is enabled
+--- @param win_width integer? The width of the dashboard window, used for centering text if the centered option is enabled
 --- @param header_width integer? An optional width to be used for calculating the padding instead of the text width, allowing for centering based on a different reference width if provided
 --- @return string[] lines, homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
 function M.get(opts, header_line_count, win_width, header_width)
@@ -84,9 +84,12 @@ function M.get(opts, header_line_count, win_width, header_width)
 			utils.concat(lines, item_line)
 			line_num = line_num + 1
 
-			local start = item_line:len()
-				- (item_line:len() - padding:len() - item_prefix:len())
-				- (math.max(0, opts.item_indent - 1))
+			local start = math.max(
+				1,
+				item_line:len()
+					- (item_line:len() - padding:len() - item_prefix:len())
+					- (math.max(0, opts.item_indent - 1))
+			)
 
 			-- Cache the line number for this item, used for navigation and actions
 			table.insert(lines_metadata, {
@@ -104,4 +107,5 @@ function M.get(opts, header_line_count, win_width, header_width)
 
 	return lines, lines_metadata
 end
+
 return M

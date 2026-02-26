@@ -2,7 +2,7 @@ local M = {}
 
 --- Maps the header content from the options to a list of strings to be rendered
 --- @param opts homecoming-nvim.Opts The configuration options
---- @returns string[] A list of strings representing the header content to be rendered
+--- @return string[] header A list of strings representing the header content to be rendered
 function M.get(opts)
 	local margin = require("homecoming-nvim.ui.components.margin")
 	local utils = require("homecoming-nvim.utils")

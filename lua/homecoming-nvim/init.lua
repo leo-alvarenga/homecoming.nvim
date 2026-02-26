@@ -28,13 +28,11 @@ end
 
 function M.open(close_all)
 	local buf = state.get_buffer()
-
+	local w, h = state.get_window_size()
 	if close_all then
-		state.set_lines(
-			ui.close_all_and_refresh(buf, config.opts, state.get_window_size(), move_cursor, state.execute_current_item)
-		)
+		state.set_lines(ui.close_all_and_refresh(buf, config.opts, w, h, move_cursor, state.execute_current_item))
 	else
-		state.set_lines(ui.refresh(buf, config.opts, state.get_window_size(), move_cursor, state.execute_current_item))
+		state.set_lines(ui.refresh(buf, config.opts, w, h, move_cursor, state.execute_current_item))
 	end
 
 	move_cursor(0) -- Ensure cursor is on the first item

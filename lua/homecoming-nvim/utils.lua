@@ -32,8 +32,6 @@ function M.concat(tab, val)
 		for _, v in ipairs(val) do
 			if type(v) == "string" then
 				table.insert(tab, M.trim_end(v))
-			else
-				vim.notify(vim.inspect(v))
 			end
 		end
 	elseif type(val) == "string" then

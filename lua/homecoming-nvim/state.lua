@@ -28,7 +28,8 @@ function M.get_window()
 end
 
 function M.get_window_size()
-	return vim.api.nvim_win_get_width(M.get_window()), 0
+	local win = M.get_window()
+	return vim.api.nvim_win_get_width(win), vim.api.nvim_win_get_height(win)
 end
 
 --- Returns the dashboard buffer, creating it if it doesn't exist or is invalid

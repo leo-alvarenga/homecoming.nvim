@@ -34,4 +34,21 @@ function M.lines(lines, width, archor_width)
 	return centered_lines
 end
 
+--- Centers the given list of lines vertically within a specified height by adding empty lines as padding on the top
+--- @param lines string[] The list of lines to be centered vertically
+--- @param win_height integer The total height within which to center the lines
+--- @return string[] centered_lines, integer padding A new list of lines with added empty lines on the top to center the original lines vertically within the specified height
+function M.center_vertically(lines, win_height)
+	local padding = math.max(0, math.floor((win_height - #lines) / 2))
+
+	local centered_lines = {}
+	for _ = 1, padding do
+		table.insert(centered_lines, "")
+	end
+
+	vim.list_extend(centered_lines, lines)
+
+	return centered_lines, padding
+end
+
 return M
