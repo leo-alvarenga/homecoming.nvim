@@ -1,7 +1,6 @@
 --- @type homecoming-nvim.Opts
 local default_config = {
 	auto_start = true,
-	centered = true,
 
 	header_mb = 1,
 	header = function()

@@ -67,7 +67,7 @@ function M.get(opts, header_line_count, win_width, header_width)
 
 	local line_num = header_line_count or #lines
 	for j, section in ipairs(opts.sections) do
-		if opts.centered and win_width then
+		if win_width then
 			utils.concat(lines, center.get_padding(longest_section, win_width) .. section.title)
 		else
 			utils.concat(lines, section.title)
@@ -76,7 +76,7 @@ function M.get(opts, header_line_count, win_width, header_width)
 		line_num = line_num + 1
 		for i, item in ipairs(section.items) do
 			local padding = ""
-			if opts.centered and win_width then
+			if win_width then
 				padding = center.get_padding(longest_item, win_width)
 			end
 
