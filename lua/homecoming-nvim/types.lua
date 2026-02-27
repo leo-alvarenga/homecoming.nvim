@@ -8,18 +8,30 @@
 --- @field title string? The title of the section, displayed above the list of items
 --- @field items homecoming-nvim.Item[] A list of items in the section, each with a label and an action function to execute when selected
 
+--- @alias homecoming-nvim.ContentAnchor
+--- | 'header'
+--- | 'header_half'
+--- | 'self'
+
 --- @class homecoming-nvim.Opts
 --- @field auto_start boolean? If true, the dashboard will automatically open when Neovim starts with no file arguments. Default is true
---- @field header string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard header
---- @field sections homecoming-nvim.Section[] A list of sections to be displayed on the dashboard, each with a title and a list of items
---- @field footer string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard footer
+--- @field header_hl_group string? The name of the highlight group to be used for the header section. Default is "Title"
 --- @field header_mb integer? How many lines should be added as margin after the header section. Default is 1
+--- @field header string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard header
+--- @field section_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'header'
+--- @field section_hl_group string? The name of the highlight group to be used for section titles. Default is "Delimiter"
 --- @field section_gap integer? How many lines should be added as gap between sections. Default is 1
+--- @field sections homecoming-nvim.Section[] A list of sections to be displayed on the dashboard, each with a title and a list of items
 --- @field item_gap integer? How many lines should be added as gap between items. Default is 0
+--- @field item_hl_group string? The name of the highlight group to be used for items. Default is "Comment"
+--- @field item_selected_hl_group string? The name of the highlight group to be used of the currently selected item. Default is "Normal"
 --- @field item_prefix_char string? A string to prefix each item label with, default is ""
 --- @field item_indent integer? How many spaces to indent each item label (including the len of item_prefix_char), default is 2
+--- @field footer_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'self'
+--- @field footer_hl_group string? The name of the highlight group to be used for the footer. Default is "ErrorMsg"
 --- @field footer_mt integer? How many lines should be added as margin before the footer section. Default is 0
 --- @field footer_mb integer? How many lines should be added as margin after the footer section. Default is 0
+--- @field footer string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard footer
 
 --- @class homecoming-nvim.LineInfo
 --- @field action string|function The VimCMD or function to be executed when the line is selected
@@ -34,9 +46,9 @@
 
 --- @class homecoming-nvim.DashboardState
 --- @field buf integer|nil Buffer handle for the dashboard buffer
+--- @field win integer|nil Window handle for the dashboard buffer
 --- @field curr_item integer Current curr_item position (1-based index into the list of items)
 --- @field highlight_ns integer|nil Namespace handle for curr_item highlighting
---- @field item_lines table<number, integer> Cache of line numbers for each item, used for navigation and actions
 --- @field lines homecoming-nvim.LineInfo[] Cache of all lines in the dashboard, used for rendering and refreshing the buffer
 
 return {}

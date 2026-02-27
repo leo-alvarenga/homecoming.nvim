@@ -2,17 +2,23 @@
 local default_config = {
 	auto_start = true,
 
+	header_hl_group = "Title",
 	header_mb = 1,
 	header = function()
 		return {
-			"Welcome 👋",
+			"Welcome",
 		}
 	end,
 
 	item_gap = 0,
+	item_hl_group = "Comment",
+	item_selected_hl_group = "Normal",
 	item_indent = 2,
 	item_prefix_char = "",
+
+	section_anchor = "header",
 	section_gap = 1,
+	section_hl_group = "Delimiter",
 	sections = {
 		{
 			title = "Actions",
@@ -44,19 +50,22 @@ local default_config = {
 		},
 	},
 
-	footer_mt = 0,
+	footer_anchor = "self",
+	footer_hl_group = "ErrorMsg",
+	footer_mt = 2,
 	footer_mb = 0,
 	footer = function()
 		return {
-			"",
-			"Have a productive session ✨",
+			"Have a productive session",
+			"Neovim version: " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch,
 		}
 	end,
 }
 
 local M = {}
 
-M.opts = {}
+--- @type homecoming-nvim.Opts
+M.opts = default_config
 
 function M.set_opts(user_opts)
 	M.opts = vim.tbl_deep_extend("force", {}, default_config, user_opts or {})

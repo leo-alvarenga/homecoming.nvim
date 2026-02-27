@@ -21,6 +21,10 @@ end
 --- @param s string The string to trim
 --- @return string s The trimmed string
 function M.trim_end(s)
+	if type(s) ~= "string" or s:len() < 2 then
+		return s
+	end
+
 	return s:match("^(.-)%s*$")
 end
 

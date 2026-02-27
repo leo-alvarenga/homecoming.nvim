@@ -5,12 +5,40 @@ local M = {}
 --- @type homecoming-nvim.DashboardState
 M.curr = {
 	buf = nil,
+	win = nil,
 	curr_item = 1,
 
 	highlight_ns = nil, -- Namespace for curr_item highlighting
-	item_lines = {}, -- Cache of line numbers for each item, used for navigation and actions
 	lines = {},
 }
+
+function M.reset()
+	M.curr.buf = nil
+	M.curr.win = nil
+	M.curr.curr_item = 1
+	M.curr.highlight_ns = nil
+	M.curr.lines = {}
+end
+
+--- @param lines homecoming-nvim.LineInfo[] The metadata for each line corresponding to items, including action, length, line number, and start column, used for navigation and actions
+function M.set_lines(lines)
+	M.curr.lines = lines
+end
+
+function M.get_window()
+	if M.curr.win and vim.api.nvim_win_is_valid(M.curr.win) then
+		return M.curr.win or 0 -- 0 is here purely for type consistency, it will never actually be returned since we check validity above
+	end
+
+	M.curr.win = vim.api.nvim_get_current_win()
+
+	return M.curr.win or 0 -- 0 is here purely for type consistency, it will never actually be returned since we always set the window above
+end
+
+function M.get_window_size()
+	local win = M.get_window()
+	return vim.api.nvim_win_get_width(win), vim.api.nvim_win_get_height(win)
+end
 
 --- Returns the dashboard buffer, creating it if it doesn't exist or is invalid
 --- @returns integer Buffer handle
@@ -48,11 +76,12 @@ function M.delete_buffer()
 end
 
 --- Returns the line and column range for highlighting the current item, based on the cached line information for the current item
+--- @param opts homecoming-nvim.Opts The user-provided configuration options
 --- @return homecoming-nvim.LineHlRange range The line and column range for highlighting the current item, used for navigation and actions
-function M.get_curr_item_hl_range()
+function M.get_curr_item_hl_range(opts)
 	local line_info = M.curr.lines[M.curr.curr_item] or {}
 
-	local start_col = (line_info.start or 1) - 1
+	local start_col = ((line_info.start or 1) - math.max(opts.item_indent, (opts.item_prefix_char or ""):len())) + 1
 	local end_col = start_col + (line_info.len or 1)
 
 	return {
