@@ -9,9 +9,11 @@ I always felt that the startup experience could be more welcoming and useful. Mo
 ## Preview
 
 Default configuration with a simple header, two sections (Actions and Resources), and a footer showing a welcome message and the Neovim version:
+
 ![Default configuration preview](./docs/default.png)
 
 Custom configuration with a centered layout, custom header and footer:
+
 ![Custom configuration preview](./docs/customized.png)
 
 ## Features
