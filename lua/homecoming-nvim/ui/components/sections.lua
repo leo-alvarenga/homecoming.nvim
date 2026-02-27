@@ -71,14 +71,18 @@ function M.get(opts, header_line_count, win_width, header_width)
 
 	local line_num = header_line_count or #lines
 	for j, section in ipairs(opts.sections) do
-		if win_width then
-			utils.concat(lines, center.get_padding(longest_section, win_width) .. section.title)
-		else
-			utils.concat(lines, section.title)
-		end
+		local has_title = section.title and section.title:len() > 0
 
-		line_num = line_num + 1
-		table.insert(section_lines, line_num)
+		if has_title then
+			if win_width then
+				utils.concat(lines, center.get_padding(longest_section, win_width) .. section.title)
+			else
+				utils.concat(lines, section.title)
+			end
+
+			line_num = line_num + 1
+			table.insert(section_lines, line_num)
+		end
 
 		for i, item in ipairs(section.items) do
 			local padding = ""

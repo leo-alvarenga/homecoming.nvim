@@ -45,12 +45,16 @@ function M.render(buf, hl_ns, opts, win_width, win_height)
 	local lines = {}
 
 	local header = components.header.get(opts)
-	utils.concat(lines, components.center.lines(header, win_width))
-
 	local header_width = 0
 
 	for _, line in ipairs(header) do
 		header_width = math.max(header_width, vim.fn.strdisplaywidth(line))
+	end
+
+	if opts.header_centered then
+		utils.concat(lines, components.center.lines(header, win_width))
+	else
+		utils.concat(lines, components.center.lines(header, win_width, header_width))
 	end
 
 	local sections, line_metadata, section_lines = components.sections.get(opts, #lines, win_width, header_width)
