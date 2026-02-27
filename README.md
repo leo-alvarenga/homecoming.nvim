@@ -145,6 +145,27 @@ local opts = {
 }
 ```
 
+| Field                  | Type                           | Description                                                                                        | Default     |
+| ---------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------- | ----------- |
+| auto_start             | boolean?                       | If true, the dashboard will automatically open when Neovim starts with no file arguments.          | true        |
+| header_hl_group        | string?                        | The name of the highlight group to be used for the header section.                                 | "Title"     |
+| header_mb              | integer?                       | How many lines should be added as margin after the header section.                                 | 1           |
+| header                 | string\|string[]\|function     | A function that returns a list of strings to be displayed as the dashboard header.                 |             |
+| section_anchor         | homecoming-nvim.ContentAnchor? | Determines which component to use as the anchor for centering when the centered option is enabled. | "header"    |
+| section_hl_group       | string?                        | The name of the highlight group to be used for section titles.                                     | "Delimiter" |
+| section_gap            | integer?                       | How many lines should be added as gap between sections.                                            | 1           |
+| sections               | homecoming-nvim.Section[]      | A list of sections to be displayed on the dashboard, each with a title and a list of items.        |             |
+| item_gap               | integer?                       | How many lines should be added as gap between items.                                               | 0           |
+| item_hl_group          | string?                        | The name of the highlight group to be used for items.                                              | "Comment"   |
+| item_selected_hl_group | string?                        | The name of the highlight group to be used of the currently selected item.                         | "Normal"    |
+| item_prefix_char       | string?                        | A string to prefix each item label with.                                                           | ""          |
+| item_indent            | integer?                       | How many spaces to indent each item label (including the len of item_prefix_char).                 | 2           |
+| footer_anchor          | homecoming-nvim.ContentAnchor? | Determines which component to use as the anchor for centering when the centered option is enabled. | "self"      |
+| footer_hl_group        | string?                        | The name of the highlight group to be used for the footer.                                         | "ErrorMsg"  |
+| footer_mt              | integer?                       | How many lines should be added as margin before the footer section.                                | 2           |
+| footer_mb              | integer?                       | How many lines should be added as margin after the footer section.                                 | 0           |
+| footer                 | string\|string[]\|function     | A function that returns a list of strings to be displayed as the dashboard footer.                 |             |
+
 ## License
 
 This project is licensed under the GPLv3 License. See the [LICENSE](LICENSE) file for details.
