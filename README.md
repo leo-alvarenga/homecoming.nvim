@@ -6,6 +6,11 @@ A dead-simple, customizable and cozy dashboard.
 
 I always felt that the startup experience could be more welcoming and useful. Most dashboard plugins I tried were either packed with features I didn’t need or required confusing or overwhelming configuration just to look decent. I wanted something that felt right out of the box—clean, simple, and easy to tweak. That’s why I built this plugin: to give myself (and others) a place that makes starting up Neovim feel inviting and hassle-free... evoking the feeling of **coming home** to a familiar and cozy environment every time I open my editor.
 
+## Preview
+
+[!Default configuration preview](./docs/default.png)
+[!Custom configuration preview](./docs/customized.png)
+
 ## Features
 
 - **No configuration required to get started**
