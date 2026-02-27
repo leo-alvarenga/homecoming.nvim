@@ -39,7 +39,7 @@ end
 --- @param header_line_count integer The number of lines in the header, used to calculate line numbers for items
 --- @param win_width integer? The width of the dashboard window, used for centering text if the centered option is enabled
 --- @param header_width integer? An optional width to be used for calculating the padding instead of the text width, allowing for centering based on a different reference width if provided
---- @return string[] lines, homecoming-nvim.LineInfo[] lines_metadata The list of lines to be rendered and the corresponding metadata for each item line, including action, length, line number, and start column
+--- @return string[] lines, homecoming-nvim.LineInfo[] lines_metadata, integer[] section_lines
 function M.get(opts, header_line_count, win_width, header_width)
 	local center = require("homecoming-nvim.ui.components.center")
 	local margin = require("homecoming-nvim.ui.components.margin")
@@ -62,7 +62,12 @@ function M.get(opts, header_line_count, win_width, header_width)
 
 	--- @type homecoming-nvim.LineInfo[]
 	local lines_metadata = {}
+
+	--- @type string[]
 	local lines = {}
+
+	--- @type integer[]
+	local section_lines = {}
 
 	local line_num = header_line_count or #lines
 	for j, section in ipairs(opts.sections) do
@@ -73,6 +78,7 @@ function M.get(opts, header_line_count, win_width, header_width)
 		end
 
 		line_num = line_num + 1
+		table.insert(section_lines, line_num)
 
 		for i, item in ipairs(section.items) do
 			local padding = ""
@@ -105,7 +111,7 @@ function M.get(opts, header_line_count, win_width, header_width)
 		end
 	end
 
-	return lines, lines_metadata
+	return lines, lines_metadata, section_lines
 end
 
 return M

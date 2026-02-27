@@ -1,4 +1,10 @@
 return {
 	buffer_name = "homecoming://Dashboard",
-	highlights = { current_item = "CurrItem", cursor_line = "HomecomingDashboardCursorLine" },
+	hl = {
+		current_item = "HomecomingDashboardCurrItem",
+		footer = "HomecomingDashboardFooter",
+		header = "HomecomingDashboardHeader",
+		item = "HomecomingDashboardItem",
+		section = "HomecomingDashboardSection",
+	},
 }

@@ -2,6 +2,7 @@
 local default_config = {
 	auto_start = true,
 
+	header_hl_group = "Title",
 	header_mb = 1,
 	header = function()
 		return {
@@ -10,11 +11,14 @@ local default_config = {
 	end,
 
 	item_gap = 0,
+	item_hl_group = "Comment",
+	item_selected_hl_group = "Normal",
 	item_indent = 2,
 	item_prefix_char = "",
 
 	section_anchor = "header",
 	section_gap = 1,
+	section_hl_group = "Delimiter",
 	sections = {
 		{
 			title = "Actions",
@@ -47,6 +51,7 @@ local default_config = {
 	},
 
 	footer_anchor = "self",
+	footer_hl_group = "ErrorMsg",
 	footer_mt = 2,
 	footer_mb = 0,
 	footer = function()

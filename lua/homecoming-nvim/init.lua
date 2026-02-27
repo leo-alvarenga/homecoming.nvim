@@ -21,7 +21,7 @@ end
 function M.setup(user_opts)
 	config.set_opts(user_opts)
 
-	ui.highlights.register_hls(state.get_highlight_ns())
+	ui.highlights.register_hls(config.opts)
 	setup_autocmds(config.opts)
 end
 
@@ -29,17 +29,28 @@ end
 --- @param delta integer The number of positions to move the cursor (positive or negative)
 local function move_cursor(delta)
 	state.move(delta)
-	ui.update_cursor(state.get_buffer(), state.get_highlight_ns(), state.get_curr_item_hl_range())
+
+	local win_width = state.get_window_size()
+	ui.update_cursor(
+		state.get_buffer(),
+		state.get_highlight_ns(),
+		win_width,
+		state.get_curr_item_hl_range(),
+		state.curr.lines
+	)
 end
 
 function M.open(close_all)
 	local buf = state.get_buffer()
+	local hl_ns = state.get_highlight_ns()
 	local w, h = state.get_window_size()
 
 	if close_all then
-		state.set_lines(ui.close_all_and_refresh(buf, config.opts, w, h, move_cursor, state.execute_current_item))
+		state.set_lines(
+			ui.close_all_and_refresh(buf, hl_ns, config.opts, w, h, move_cursor, state.execute_current_item)
+		)
 	else
-		state.set_lines(ui.refresh(buf, config.opts, w, h, move_cursor, state.execute_current_item))
+		state.set_lines(ui.refresh(buf, hl_ns, config.opts, w, h, move_cursor, state.execute_current_item))
 	end
 
 	move_cursor(0) -- Ensure cursor is on the first item
