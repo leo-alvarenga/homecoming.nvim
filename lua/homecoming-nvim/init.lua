@@ -5,7 +5,7 @@ local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
-M.version = "0.2.0"
+M.version = "1.0.0"
 
 local function open_if_no_buffers()
 	local buf_count = vim.fn.getbufinfo({ buflisted = 1 })
