@@ -76,11 +76,12 @@ function M.delete_buffer()
 end
 
 --- Returns the line and column range for highlighting the current item, based on the cached line information for the current item
+--- @param opts homecoming-nvim.Opts The user-provided configuration options
 --- @return homecoming-nvim.LineHlRange range The line and column range for highlighting the current item, used for navigation and actions
-function M.get_curr_item_hl_range()
+function M.get_curr_item_hl_range(opts)
 	local line_info = M.curr.lines[M.curr.curr_item] or {}
 
-	local start_col = (line_info.start or 1) - 1
+	local start_col = ((line_info.start or 1) - math.max(opts.item_indent, (opts.item_prefix_char or ""):len())) + 1
 	local end_col = start_col + (line_info.len or 1)
 
 	return {

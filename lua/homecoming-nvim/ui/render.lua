@@ -7,7 +7,6 @@ M.metadata = {
 	header_range = { { 1, 1 }, { 1, 1 } },
 	footer_range = { { 1, 1 }, { 1, 1 } },
 
-	prefix_ranges = {},
 	section_lines = {},
 }
 
@@ -74,12 +73,18 @@ function M.render(buf, hl_ns, opts, win_width, win_height)
 		line_metadata[i].line = line_metadata[i].line + padding
 	end
 
+	--------------------------------
+	-- Set metadata for highlighting
+
 	M.metadata.footer_range = { { #lines - #footer, 1 }, { #lines, win_width - 1 } }
 	M.metadata.header_range = { { 1, 1 }, { #header + padding - 1, win_width - 1 } }
 
+	M.metadata.section_lines = {}
 	for _, section_line in ipairs(section_lines) do
 		table.insert(M.metadata.section_lines, section_line + padding)
 	end
+
+	--------------------------------
 
 	M.write_lines(buf, lines)
 
@@ -91,9 +96,10 @@ end
 --- @param buf integer The buffer handle for the dashboard, used to set the cursor position and apply highlights
 --- @param hl_ns integer The highlight namespace handle for the dashboard, used to apply highlights to the current item
 --- @param win_width integer The width of the dashboard window
+--- @param opts homecoming-nvim.Opts The configuration options for the dashboard
 --- @param range homecoming-nvim.LineHlRange The line and column range for highlighting
 --- @param lines homecoming-nvim.LineInfo[] The list of line metadata for the dashboard
-function M.update_cursor(buf, hl_ns, win_width, range, lines)
+function M.update_cursor(buf, hl_ns, win_width, opts, range, lines)
 	vim.api.nvim_win_set_cursor(0, { range.line, math.max(1, range.start_col) - 1 })
 
 	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
@@ -105,10 +111,17 @@ function M.update_cursor(buf, hl_ns, win_width, range, lines)
 			{ line_info.line - 1, line_info.start + line_info.len },
 		}
 
+		local prefix_hl_range = {
+			{ line_info.line - 1, math.max(0, line_info.start - (opts.item_prefix_char or ""):len()) },
+			{ line_info.line - 1, line_info.start },
+		}
+
 		if line_info.line ~= range.line then
 			vim.hl.range(buf, hl_ns, consts.hl.item, hl_range[1], hl_range[2])
+			vim.hl.range(buf, hl_ns, consts.hl.item, prefix_hl_range[1], prefix_hl_range[2])
 		else
 			vim.hl.range(buf, hl_ns, consts.hl.current_item, hl_range[1], hl_range[2])
+			vim.hl.range(buf, hl_ns, consts.hl.current_item, prefix_hl_range[1], prefix_hl_range[2])
 		end
 	end
 end

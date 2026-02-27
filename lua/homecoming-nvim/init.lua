@@ -35,7 +35,8 @@ local function move_cursor(delta)
 		state.get_buffer(),
 		state.get_highlight_ns(),
 		win_width,
-		state.get_curr_item_hl_range(),
+		config.opts,
+		state.get_curr_item_hl_range(config.opts),
 		state.curr.lines
 	)
 end
