@@ -12,7 +12,7 @@ Default configuration with a simple header, two sections (Actions and Resources)
 
 ![Default configuration preview](./docs/default.png)
 
-Custom configuration with a centered layout, custom header and footer:
+Custom configuration with a custom header, sections and footer:
 
 ![Custom configuration preview](./docs/customized.png)
 
