@@ -5,11 +5,7 @@ local default_config = {
 	header_centered = false,
 	header_hl_group = "Title",
 	header_mb = 1,
-	header = function()
-		return {
-			"Welcome",
-		}
-	end,
+	header = "Welcome",
 
 	item_gap = 0,
 	item_hl_group = "Comment",
