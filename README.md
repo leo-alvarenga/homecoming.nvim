@@ -8,9 +8,9 @@ I always felt that the startup experience could be more welcoming and useful. Mo
 
 ## Preview
 
-[!Default configuration preview](./docs/default.png)
+![Default configuration preview](./docs/default.png)
 
-[!Custom configuration preview](./docs/customized.png)
+![Custom configuration preview](./docs/customized.png)
 
 ## Features
 
