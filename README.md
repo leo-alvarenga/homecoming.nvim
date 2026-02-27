@@ -47,7 +47,21 @@ Plug 'leo-alvarenga/homecoming.nvim'
 
 ## Usage
 
-After installation, the dashboard will appear automatically when you start Neovim with no files specified.
+After installation, the dashboard will appear automatically when you start Neovim with no files specified if `opts.auto_start` is set to `true` or left unset.
+
+You can also manually open the dashboard at any time by running the `:Homecoming` command.
+
+### Commands
+
+- `:Homecoming` - Open the dashboard
+- `:HomecomingCloseCurrBuf` - Close the current buffer and open the dashboard if it was the last buffer
+- `:HomecomingOpenAndPreserveOther` - Open the dashboard, without closing other buffers
+
+> Creating a custom mapping to close the current buffer with `:HomecomingCloseCurrBuf` can be useful to ensure that the dashboard will open when closing the last buffer, for example:
+
+> ```vim
+> nnoremap <leader>q :HomecomingCloseCurrBuf<CR>
+> ```
 
 ### Configuration
 
