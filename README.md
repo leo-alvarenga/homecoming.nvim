@@ -16,6 +16,10 @@ Custom configuration with a custom header, sections and footer:
 
 ![Custom configuration preview](./docs/customized.png)
 
+Custom configuration with a custom header, sections with no title or gaps and footer:
+
+![Custom configuration section-less preview](./docs/customized_no_section_titles.png)
+
 ## Features
 
 - **No configuration required to get started**

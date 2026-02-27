@@ -4,7 +4,7 @@ local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
-M.version = "0.1.0"
+M.version = "0.2.0"
 
 --- @param user_opts homecoming-nvim.Opts User-provided configuration options to customize
 local function setup_autocmds(user_opts)
