@@ -57,7 +57,7 @@ local default_config = {
 	footer = function()
 		return {
 			"Have a productive session",
-			"NeoVim version: " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch,
+			"Neovim version: " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch,
 		}
 	end,
 }
