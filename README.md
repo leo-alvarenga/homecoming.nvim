@@ -145,6 +145,8 @@ local opts = {
 }
 ```
 
+## Options Reference
+
 | Field                  | Type                           | Description                                                                                        | Default     |
 | ---------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------- | ----------- |
 | auto_start             | boolean?                       | If true, the dashboard will automatically open when Neovim starts with no file arguments.          | true        |
