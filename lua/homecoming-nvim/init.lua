@@ -26,11 +26,6 @@ local function open_if_no_buffers()
 end
 
 local function close_current_buffer()
-	local curr = vim.api.nvim_buf_get_name(0)
-	if (curr or "") == consts.buffer_name then
-		return
-	end
-
 	vim.cmd("bd")
 	open_if_no_buffers()
 end

@@ -2,6 +2,7 @@
 local default_config = {
 	auto_start = true,
 
+	header_centered = false,
 	header_hl_group = "Title",
 	header_mb = 1,
 	header = function()
