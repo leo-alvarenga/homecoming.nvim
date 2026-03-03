@@ -52,4 +52,30 @@
 --- @field highlight_ns integer|nil Namespace handle for curr_item highlighting
 --- @field lines homecoming-nvim.LineInfo[] Cache of all lines in the dashboard, used for rendering and refreshing the buffer
 
+--- @class homecoming-nvim.HlLine
+--- @field row integer
+--- @field start_col integer
+--- @field end_col integer
+--- @field hl_group string
+
+--- @class homecoming-nvim.ItemLine
+--- @field label string
+--- @field hl homecoming-nvim.HlLine
+--- @field action string|function
+
+--- @class homecoming-nvim.AdapterResult
+--- @field header_width integer
+--- @field lines string[]
+--- @field hl_lines homecoming-nvim.HlLine[]
+--- @field item_lines homecoming-nvim.ItemLine[]
+
+--- @class homecoming-nvim.RenderState
+--- @field buf integer|nil
+--- @field win integer|nil
+--- @field curr_item integer
+--- @field highlight_ns integer|nil
+--- @field lines string[]
+--- @field hl_lines homecoming-nvim.HlLine[]
+--- @field item_lines homecoming-nvim.ItemLine[]
+
 return {}

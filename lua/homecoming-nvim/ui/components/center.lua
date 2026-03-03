@@ -3,9 +3,10 @@ local M = {}
 --- Calculates the number of padding spaces needed to center the given text within a specified width
 --- @param text_width integer The text to be centered
 --- @param width integer The total width within which to center the text, used to calculate the padding
+--- @param archor_width integer? An optional width to be used for calculating the padding instead of the text width, allowing for centering based on a different reference width if provided
 --- @return string padding A string consisting of the calculated number of spaces needed to center the text within the specified width
-function M.get_padding(text_width, width)
-	local padding = math.floor((width - text_width) / 2)
+function M.get_padding(text_width, width, archor_width)
+	local padding = math.floor((width - (archor_width or text_width)) / 2)
 
 	return string.rep(" ", padding)
 end
@@ -15,7 +16,7 @@ end
 --- @param width integer The total width within which to center the text, used to calculate
 --- @param archor_width integer? An optional width to be used for calculating the padding instead of the text width, allowing for centering based on a different reference width if provided
 --- @return string txt The input text with added padding spaces on the left to center it within the specified width
-function M.text(text, width, archor_width, condition)
+function M.text(text, width, archor_width)
 	return M.get_padding(archor_width or vim.fn.strdisplaywidth(text), width) .. text
 end
 
