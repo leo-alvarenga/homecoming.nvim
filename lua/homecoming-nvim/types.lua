@@ -16,10 +16,10 @@
 --- @class homecoming-nvim.Opts
 --- @field auto_start boolean? If true, the dashboard will automatically open when Neovim starts with no file arguments. Default is true
 --- @field header_hl_group string? The name of the highlight group to be used for the header section. Default is "Title"
---- @field header_centered boolean? Whether to center the header text. If true, all text is aligned at the center, potentially breaking headers that contain multiple lines with diffents lengths. Default is false
---- @field header_mb integer? How many lines should be added as margin after the header section. Default is 1
+--- @field header_centered boolean? Whether to center the header text. If true, all text is aligned at the center, potentially breaking headers that contain multiple lines with diffents lengths. Default is true
+--- @field header_mb integer? How many lines should be added as margin after the header section. Default is 2
 --- @field header string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard header
---- @field section_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'header'
+--- @field section_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'self'
 --- @field section_hl_group string? The name of the highlight group to be used for section titles. Default is "Delimiter"
 --- @field section_gap integer? How many lines should be added as gap between sections. Default is 1
 --- @field sections homecoming-nvim.Section[] A list of sections to be displayed on the dashboard, each with a title and a list of items
@@ -30,7 +30,7 @@
 --- @field item_indent integer? How many spaces to indent each item label (including the len of item_prefix_char), default is 2
 --- @field footer_anchor homecoming-nvim.ContentAnchor? Determines which component to use as the anchor for centering when the centered option is enabled. If 'header', the header will be used as the anchor for centering. If 'self' or not specified, the longest line among header, section titles, and item labels will be used as the anchor for centering. Default is 'self'
 --- @field footer_hl_group string? The name of the highlight group to be used for the footer. Default is "ErrorMsg"
---- @field footer_mt integer? How many lines should be added as margin before the footer section. Default is 0
+--- @field footer_mt integer? How many lines should be added as margin before the footer section. Default is 2
 --- @field footer_mb integer? How many lines should be added as margin after the footer section. Default is 0
 --- @field footer string|string[]|(fun(): string[]|string) A function that returns a list of strings to be displayed as the dashboard footer
 
