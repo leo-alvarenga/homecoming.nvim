@@ -46,29 +46,39 @@ function M._get_header(opts, win_width)
 	return res
 end
 
---- @param opts homecoming-nvim.Opts
 --- @param win_width integer
 --- @param prev_values homecoming-nvim.AdapterResult
 --- @param items homecoming-nvim.Item[]
+--- @param item_prefix string
+--- @param longest_item_len integer
+--- @param section_anchor integer?
 --- @return homecoming-nvim.AdapterResult
-function M._get_items(opts, win_width, prev_values, items)
+function M._get_items(win_width, prev_values, items, item_prefix, longest_item_len, section_anchor)
 	--- @type homecoming-nvim.AdapterResult
 	local res = prev_values
 
 	local line = ""
-	local padding = ""
-	local row = math.max(0, #res.lines - 1)
-
-	--- @type homecoming-nvim.HlLine
-	local hl_line = {
-		row = row,
-		start_col = 1,
-		end_col = 1,
-		hl_group = consts.hl.section,
-	}
+	local padding = components.center.get_padding(longest_item_len, win_width, section_anchor)
 
 	for _, item in ipairs(items or {}) do
-		padding = ""
+		line = padding .. item_prefix .. item.label
+
+		table.insert(res.lines, line)
+
+		table.insert(
+			res.item_lines,
+			--- @type homecoming-nvim.ItemLine
+			{
+				action = item.action,
+				label = item.label,
+				hl = {
+					row = #res.lines - 1,
+					start_col = #padding,
+					end_col = -1,
+					hl_group = consts.hl.item,
+				},
+			}
+		)
 	end
 
 	return res
@@ -83,7 +93,6 @@ function M._get_sections(opts, win_width, prev_values)
 	local res = prev_values
 
 	local item_prefix = helpers.get_item_prefix(opts)
-
 	local longest_section, longest_item = helpers.get_longest_lens(opts)
 
 	local section_anchor = res.header_width
@@ -95,27 +104,36 @@ function M._get_sections(opts, win_width, prev_values)
 	end
 
 	local padding = components.center.get_padding(longest_section, win_width, section_anchor)
-	for _, section in ipairs(opts.sections or {}) do
-		local has_content = (section.title and section.title:len() > 0) or (section.items and #section.items > 0)
+	for i, section in ipairs(opts.sections or {}) do
+		local has_title = (section.title and section.title:len() > 0)
+		local has_items = (section.items and #section.items > 0)
+		local has_content = has_title or has_items
 
-		if section.title and section.title:len() > 0 then
+		if has_title then
 			local line = padding .. section.title
 
 			table.insert(res.lines, line)
 
 			table.insert(res.hl_lines, {
-				row = #res.lines,
+				row = #res.lines - 1,
 				start_col = #padding,
 				end_col = -1,
 				hl_group = consts.hl.section,
 			})
 		end
 
-		if section.items then
-			-- Items
+		if has_items then
+			res = M._get_items(
+				win_width,
+				res,
+				section.items,
+				item_prefix,
+				longest_item,
+				opts.section_anchor == "self" and longest_section or section_anchor
+			)
 		end
 
-		if has_content then
+		if has_content and i < #opts.sections then
 			res.lines = components.margin.add_gap(res.lines, opts.section_gap)
 		end
 	end

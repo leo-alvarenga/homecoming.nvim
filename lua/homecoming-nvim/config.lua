@@ -4,7 +4,7 @@ local default_config = {
 
 	header_centered = false,
 	header_hl_group = "Title",
-	header_mb = 1,
+	header_mb = 0,
 	header = "Welcome",
 
 	item_gap = 0,
@@ -15,7 +15,7 @@ local default_config = {
 
 	section_anchor = "header",
 	section_gap = 1,
-	section_hl_group = "Search",
+	section_hl_group = "Delimiter",
 	sections = {
 		{
 			title = "Actions",

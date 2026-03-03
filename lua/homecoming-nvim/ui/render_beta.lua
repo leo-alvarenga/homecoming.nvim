@@ -2,13 +2,6 @@ local consts = require("homecoming-nvim.constants")
 
 local M = {}
 
-M.metadata = {
-	header_range = { { 1, 1 }, { 1, 1 } },
-	footer_range = { { 1, 1 }, { 1, 1 } },
-
-	section_lines = {},
-}
-
 --- @type homecoming-nvim.RenderState
 M.state = {
 	-- Neovim handles
@@ -136,7 +129,7 @@ function M.update_cursor()
 		curr_line = curr_item.hl
 	end
 
-	vim.api.nvim_win_set_cursor(0, { curr_line.row + 1, math.max(1, curr_line.start_col) - 1 })
+	vim.api.nvim_win_set_cursor(0, { curr_line.row + 1, math.max(1, curr_line.start_col) })
 	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 
 	M.apply_hls()
