@@ -60,6 +60,7 @@
 
 --- @class homecoming-nvim.ItemLine
 --- @field label string
+--- @field cursor_col integer
 --- @field hl homecoming-nvim.HlLine
 --- @field action string|function
 

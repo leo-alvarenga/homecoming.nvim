@@ -27,10 +27,11 @@ function M.get(win_width, prev_values, items, item_prefix, longest_item_len, sec
 			--- @type homecoming-nvim.ItemLine
 			{
 				action = item.action,
+				cursor_col = #padding,
 				label = item.label,
 				hl = {
 					row = #res.lines - 1,
-					start_col = #padding,
+					start_col = #padding + #item_prefix,
 					end_col = -1,
 					hl_group = consts.hl.item,
 				},

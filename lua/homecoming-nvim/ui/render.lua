@@ -132,6 +132,8 @@ function M.update_cursor()
 	--- @type homecoming-nvim.ItemLine
 	local curr_item = M.state.item_lines[M.state.curr_item or 1]
 
+	local cursor_col = 0
+
 	--- @type homecoming-nvim.HlLine
 	local curr_line = {
 		row = 0,
@@ -141,10 +143,11 @@ function M.update_cursor()
 	}
 
 	if curr_item then
+		cursor_col = curr_item.cursor_col or 0
 		curr_line = curr_item.hl
 	end
 
-	vim.api.nvim_win_set_cursor(0, { curr_line.row + 1, math.max(1, curr_line.start_col) })
+	vim.api.nvim_win_set_cursor(0, { curr_line.row + 1, math.max(1, cursor_col) })
 	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 
 	M.apply_hls()
