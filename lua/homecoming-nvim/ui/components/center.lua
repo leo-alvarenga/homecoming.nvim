@@ -40,7 +40,7 @@ end
 --- @param win_height integer The total height within which to center the lines
 --- @return string[] centered_lines, integer padding A new list of lines with added empty lines on the top to center the original lines vertically within the specified height
 function M.center_vertically(lines, win_height)
-	local padding = math.max(0, math.floor((win_height - #lines) / 2))
+	local padding = math.max(0, math.ceil((win_height - #lines) / 2))
 
 	local centered_lines = {}
 	for _ = 1, padding do

@@ -15,7 +15,7 @@ local default_config = {
 
 	section_anchor = "header",
 	section_gap = 1,
-	section_hl_group = "Delimiter",
+	section_hl_group = "Search",
 	sections = {
 		{
 			title = "Actions",
@@ -49,7 +49,7 @@ local default_config = {
 
 	footer_anchor = "self",
 	footer_hl_group = "ErrorMsg",
-	footer_mt = 2,
+	footer_mt = 1,
 	footer_mb = 0,
 	footer = function()
 		return {

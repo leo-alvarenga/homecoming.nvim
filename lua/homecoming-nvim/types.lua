@@ -53,7 +53,7 @@
 --- @field lines homecoming-nvim.LineInfo[] Cache of all lines in the dashboard, used for rendering and refreshing the buffer
 
 --- @class homecoming-nvim.HlLine
---- @field row integer
+--- @field row integer 0 indexed line number, as per Neovim HL API
 --- @field start_col integer
 --- @field end_col integer
 --- @field hl_group string

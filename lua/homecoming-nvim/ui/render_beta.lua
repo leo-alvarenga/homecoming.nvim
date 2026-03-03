@@ -79,8 +79,8 @@ function M.apply_hls()
 			M.get_buf(),
 			M.get_highlight_ns(),
 			hl_line.hl_group,
-			{ hl_line.row - 1, hl_line.start_col },
-			{ hl_line.row - 1, hl_line.end_col }
+			{ hl_line.row, hl_line.start_col },
+			{ hl_line.row, hl_line.end_col }
 		)
 	end
 
@@ -95,8 +95,8 @@ function M.apply_hls()
 			M.get_buf(),
 			M.get_highlight_ns(),
 			hl_group,
-			{ item.hl.row - 1, item.hl.start_col },
-			{ item.hl.row - 1, item.hl.end_col }
+			{ item.hl.row, item.hl.start_col },
+			{ item.hl.row, item.hl.end_col }
 		)
 	end
 end
@@ -121,15 +121,22 @@ end
 --- Updates the cursor position and highlights the current item based on the current state of the dashboard
 function M.update_cursor()
 	local buf = M.get_buf()
+	--- @type homecoming-nvim.ItemLine
+	local curr_item = M.state.item_lines[M.state.curr_item or 1]
 
-	--- @type homecoming-nvim.HlLine|nil
-	local curr_line = M.state.hl_lines[M.state.curr_item or 1]
+	--- @type homecoming-nvim.HlLine
+	local curr_line = {
+		row = 0,
+		start_col = 0,
+		end_col = 0,
+		hl_group = "",
+	}
 
-	if not curr_line then
-		return
+	if curr_item then
+		curr_line = curr_item.hl
 	end
 
-	vim.api.nvim_win_set_cursor(0, { curr_line.row, math.max(1, curr_line.start_col) - 1 })
+	vim.api.nvim_win_set_cursor(0, { curr_line.row + 1, math.max(1, curr_line.start_col) - 1 })
 	vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 
 	M.apply_hls()
