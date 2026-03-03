@@ -3,7 +3,7 @@ local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
-M.version = "1.0.0"
+M.version = "2.0.0"
 
 local function open_if_no_buffers()
 	local buf_count = vim.fn.getbufinfo({ buflisted = 1 })
@@ -42,22 +42,24 @@ local function setup_autocmds(user_opts)
 end
 
 local function register_cmds()
-	vim.api.nvim_create_user_command("Homecoming", function()
+	local consts = require("homecoming-nvim.constants")
+
+	vim.api.nvim_create_user_command(consts.cmd.open.cmd, function()
 		M.open()
 	end, {
-		desc = "Open the Homecoming dashboard",
+		desc = consts.cmd.open.desc,
 	})
 
-	vim.api.nvim_create_user_command("HomecomingCloseCurrBuf", function()
+	vim.api.nvim_create_user_command(consts.cmd.close_curr_buf.cmd, function()
 		close_current_buffer()
 	end, {
-		desc = "Close the current buffer. If it's the last buffer, open the Homecoming dashboard",
+		desc = consts.cmd.close_curr_buf.desc,
 	})
 
-	vim.api.nvim_create_user_command("HomecomingOpenAndPreserveOther", function()
+	vim.api.nvim_create_user_command(consts.cmd.open_and_preserve_other.cmd, function()
 		M.open(true)
 	end, {
-		desc = "Open the Homecoming dashboard, preserving other buffers",
+		desc = consts.cmd.open_and_preserve_other.desc,
 	})
 end
 

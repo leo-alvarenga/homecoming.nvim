@@ -20,6 +20,22 @@ M.state = {
 --------------------------------
 -- Basic getters and setters for state
 
+function M.close_and_delete()
+	if M.state.buf and vim.api.nvim_buf_is_valid(M.state.buf) then
+		vim.api.nvim_buf_delete(M.state.buf, { force = true })
+	else
+		local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+
+		for _, curr_buf in ipairs(buffers) do
+			if vim.api.nvim_buf_is_valid(curr_buf.bufnr) and curr_buf.name == consts.buffer_name then
+				vim.api.nvim_buf_delete(curr_buf.bufnr, { force = true })
+			end
+		end
+	end
+
+	M.state.buf = nil
+end
+
 function M.get_buf()
 	if M.state.buf and vim.api.nvim_buf_is_valid(M.state.buf) then
 		return M.state.buf or 0
@@ -107,7 +123,6 @@ function M.render(opts)
 	M.state.item_lines = res.item_lines
 
 	M.write_lines()
-
 	M.apply_hls()
 end
 
@@ -167,6 +182,8 @@ end
 --- Refreshes the dashboard buffer with the current configuration and state, and sets up keymaps for navigation and actions
 --- @param opts homecoming-nvim.Opts The configuration options to use for rendering the dashboard, if nil it will use the current configuration
 function M.refresh(opts)
+	M.close_and_delete()
+
 	local buf = M.get_buf()
 
 	vim.api.nvim_buf_set_name(buf, consts.buffer_name)
@@ -176,11 +193,12 @@ function M.refresh(opts)
 	vim.bo[buf].bufhidden = "wipe"
 	vim.bo[buf].swapfile = false
 	vim.bo[buf].modifiable = false
-	vim.bo[buf].filetype = "dashboard"
+	vim.bo[buf].filetype = consts.filetype
 
 	M.render(opts)
 	M.set_keymaps()
 
+	vim.api.nvim_set_current_buf(buf)
 	vim.cmd("setlocal nonumber norelativenumber nocursorline")
 end
 
