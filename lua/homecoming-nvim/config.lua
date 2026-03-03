@@ -2,10 +2,17 @@
 local default_config = {
 	auto_start = true,
 
-	header_centered = false,
+	header_centered = true,
 	header_hl_group = "Title",
-	header_mb = 1,
-	header = "Welcome",
+	header_mb = 2,
+	header = {
+		" _   _            _   _ _",
+		"| \\ | |          | | | (_)",
+		"|  \\| | ___  ___ | | | |_ _ __ ___",
+		"| . ` |/ _ \\/ _ \\| | | | | '_ ` _ \\",
+		"| |\\  |  __/ (_) \\ \\_/ / | | | | | |",
+		"\\_| \\_/\\___|\\___/ \\___/|_|_| |_| |_|",
+	},
 
 	item_gap = 0,
 	item_hl_group = "Comment",
@@ -13,7 +20,7 @@ local default_config = {
 	item_indent = 2,
 	item_prefix_char = "",
 
-	section_anchor = "header",
+	section_anchor = "self",
 	section_gap = 1,
 	section_hl_group = "Delimiter",
 	sections = {
