@@ -69,6 +69,9 @@
 --- @field hl_lines homecoming-nvim.HlLine[]
 --- @field item_lines homecoming-nvim.ItemLine[]
 
+--- @alias homecoming-nvim.Adapter
+--- | 'homecoming' Default adapter that generates the dashboard content based on the provided options
+
 --- @class homecoming-nvim.RenderState
 --- @field buf integer|nil
 --- @field win integer|nil

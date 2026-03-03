@@ -1,5 +1,5 @@
 local config = require("homecoming-nvim.config")
-local ui = require("homecoming-nvim.ui.render_beta")
+local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
