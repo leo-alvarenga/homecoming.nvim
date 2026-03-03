@@ -3,7 +3,11 @@ local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
-M.version = "2.0.0"
+M.patch = "0"
+M.minor = "0"
+M.major = "2"
+
+M.version = string.format("%s.%s.%s", M.major, M.minor, M.patch)
 
 local function open_if_no_buffers()
 	local buf_count = vim.fn.getbufinfo({ buflisted = 1 })
