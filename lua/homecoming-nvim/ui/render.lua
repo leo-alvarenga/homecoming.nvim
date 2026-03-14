@@ -202,7 +202,7 @@ function M.refresh(opts)
 	M.set_keymaps()
 
 	vim.api.nvim_set_current_buf(buf)
-	vim.cmd("setlocal nonumber norelativenumber nocursorline")
+	vim.cmd("setlocal nonumber norelativenumber nocursorline signcolumn=no")
 end
 
 --- Moves the cursor by the given delta and updates the highlights accordingly

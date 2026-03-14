@@ -4,7 +4,7 @@ local ui = require("homecoming-nvim.ui")
 local M = {}
 
 M.patch = "0"
-M.minor = "1"
+M.minor = "2"
 M.major = "2"
 
 M.version = string.format("%s.%s.%s", M.major, M.minor, M.patch)
