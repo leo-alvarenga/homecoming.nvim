@@ -1,10 +1,36 @@
 local config = require("homecoming-nvim.config")
-local state = require("homecoming-nvim.state")
 local ui = require("homecoming-nvim.ui")
 
 local M = {}
 
-M.version = "0.1.0"
+M.patch = "0"
+M.minor = "2"
+M.major = "2"
+
+M.version = string.format("%s.%s.%s", M.major, M.minor, M.patch)
+
+local function open_if_no_buffers()
+	local buf_count = vim.fn.getbufinfo({ buflisted = 1 })
+
+	if #buf_count > 2 then
+		return
+	end
+
+	local has_only_empty = vim.iter(buf_count):all(function(buf)
+		return #buf.name == 0
+	end)
+
+	if not has_only_empty then
+		return
+	end
+
+	M.open()
+end
+
+local function close_current_buffer()
+	vim.cmd("bd")
+	open_if_no_buffers()
+end
 
 --- @param user_opts homecoming-nvim.Opts User-provided configuration options to customize
 local function setup_autocmds(user_opts)
@@ -12,11 +38,33 @@ local function setup_autocmds(user_opts)
 		vim.api.nvim_create_autocmd("VimEnter", {
 			callback = function()
 				if vim.fn.argc() == 0 then
-					M.open(true)
+					M.open()
 				end
 			end,
 		})
 	end
+end
+
+local function register_cmds()
+	local consts = require("homecoming-nvim.constants")
+
+	vim.api.nvim_create_user_command(consts.cmd.open.cmd, function()
+		M.open()
+	end, {
+		desc = consts.cmd.open.desc,
+	})
+
+	vim.api.nvim_create_user_command(consts.cmd.close_curr_buf.cmd, function()
+		close_current_buffer()
+	end, {
+		desc = consts.cmd.close_curr_buf.desc,
+	})
+
+	vim.api.nvim_create_user_command(consts.cmd.open_and_preserve_other.cmd, function()
+		M.open(true)
+	end, {
+		desc = consts.cmd.open_and_preserve_other.desc,
+	})
 end
 
 --- @param user_opts homecoming-nvim.Opts|nil User-provided configuration options to customize
@@ -24,39 +72,21 @@ function M.setup(user_opts)
 	config.set_opts(user_opts)
 
 	ui.highlights.register_hls(config.opts)
+
 	setup_autocmds(config.opts)
+	register_cmds()
 end
 
---- Moves the cursor by the given delta and updates the highlights accordingly
---- @param delta integer The number of positions to move the cursor (positive or negative)
-local function move_cursor(delta)
-	state.move(delta)
-
-	local win_width = state.get_window_size()
-	ui.update_cursor(
-		state.get_buffer(),
-		state.get_highlight_ns(),
-		win_width,
-		config.opts,
-		state.get_curr_item_hl_range(config.opts),
-		state.curr.lines
-	)
-end
-
-function M.open(close_all)
-	local buf = state.get_buffer()
-	local hl_ns = state.get_highlight_ns()
-	local w, h = state.get_window_size()
-
-	if close_all then
-		state.set_lines(
-			ui.close_all_and_refresh(buf, hl_ns, config.opts, w, h, move_cursor, state.execute_current_item)
-		)
+--- Opens the dashboard, closing all other buffers first (toggleable, enabled by default), and sets up the buffer lines and highlights
+--- @param preserve_other_buffers boolean? If true, the dashboard will be opened without closing other buffers. Defaults to false.
+function M.open(preserve_other_buffers)
+	if preserve_other_buffers then
+		ui.refresh(config.opts)
 	else
-		state.set_lines(ui.refresh(buf, hl_ns, config.opts, w, h, move_cursor, state.execute_current_item))
+		ui.close_all_and_refresh(config.opts)
 	end
 
-	move_cursor(0) -- Ensure cursor is on the first item
+	ui.move_cursor(0)
 end
 
 return M
