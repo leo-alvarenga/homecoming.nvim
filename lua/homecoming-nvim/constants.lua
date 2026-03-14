@@ -1,5 +1,5 @@
 return {
-	filetype = "homecoming",
+	filetype = "vim",
 	buffer_name = "homecoming://Dashboard",
 	cmd = {
 		open = {
